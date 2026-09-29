@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executador de Algoritmos Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #2d2d2d;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007acc;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #005f9e;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1e1e1e;
+            border-radius: 5px;
+            min-height: 20px;
+            font-family: monospace;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Algoritmos Java</h2>
+        
+        <select id="escolhaAlgoritmo">
+            <option value="primo">1. Número Primo</option>
+            <option value="somatorio">2. Somatório</option>
+            <option value="fibonacci">3. Fibonacci</option>
+            <option value="mdc">4. Máximo Divisor Comum</option>
+            <option value="quicksort">5. Quicksort</option>
+            <option value="contagem">6. Contagem</option>
+        </select>
+
+        <input type="text" id="inputDados" placeholder="Ex: 7 (ou 1,2,3,4 para arrays)">
+
+        <button id="btnExecutar">Executar</button>
+
+        <div id="resultado">O resultado aparecerá aqui...</div>
+    </div>
+
+
+    <!-- A pagina manda os dados para o servidor Java, que executa o algoritmo -->
+    <script>
+        const seletor = document.getElementById('escolhaAlgoritmo');
+        const input = document.getElementById('inputDados');
+        const btn = document.getElementById('btnExecutar');
+        const resultadoDiv = document.getElementById('resultado');
+
+        btn.addEventListener('click', async () => {
+            const parametros = new URLSearchParams({
+                algoritmo: seletor.value,
+                valor: input.value.trim()
+            });
+
+            try {
+                const resposta = await fetch('/api/executar?' + parametros);
+                resultadoDiv.innerText = await resposta.text();
+            } catch (error) {
+                resultadoDiv.innerText = "Erro ao conectar com o servidor Java.";
+            }
+        });
+    </script>
+
+</body>
+</html>
